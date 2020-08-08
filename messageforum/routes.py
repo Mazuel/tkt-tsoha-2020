@@ -1,4 +1,4 @@
-from messageforum.app import app
+from messageforum import app
 import messageforum.database.user_repository as user_repository
 from flask import redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -18,7 +18,7 @@ def register():
         user_repository.add_user(username, hash_value)
     else:
         print(username, password)
-
+        return redirect("/register")
     return redirect("/login")
 
 
@@ -47,7 +47,6 @@ def login():
             return redirect("/home")
             # TODO: correct username and password
         else:
-            print()
             return redirect("/login")
             # TODO: invalid password
 

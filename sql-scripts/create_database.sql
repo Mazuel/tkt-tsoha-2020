@@ -12,7 +12,7 @@ create table users (
     last_login timestamp
 );
 
-create table subject (
+create table subjects (
     id serial primary key,
     subject_name varchar (50) not null,
     create_time timestamp not null,
@@ -20,7 +20,7 @@ create table subject (
     visible boolean default false
 );
 
-create table thread (
+create table threads (
     id serial primary key,
     title varchar (50) not null,
     messages integer references messages,

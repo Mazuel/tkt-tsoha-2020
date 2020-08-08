@@ -12,8 +12,8 @@ Sivustolla on eri käyttäjärooleja, jotka voivat hallinnoida sivustoa eri tavo
  
 ### Toteutetut toiminnot
 
-    - [] Luoda uusi käyttäjä/kirjautua sisään sivustolle
-    - [] Mahdollisuus luoda uusia keskusteluja liittyen tiettyyn aiheeseen
-    - [] Mahdollisuus luoda suljettuja keskusteluita, joihin voi liittyä vain kutsutut käyttäjät.
-    - [] Käyttäjäroolit (Admin, Moderator, User)
-    - [] Mahdollisuus etsiä viestejä hakusanoilla ja tutkia käyttäjien aloittamia keskusteluja
+- [ ] Luoda uusi käyttäjä/kirjautua sisään sivustolle
+- [ ] Mahdollisuus luoda uusia keskusteluja liittyen tiettyyn aiheeseen
+- [ ] Mahdollisuus luoda suljettuja keskusteluita, joihin voi liittyä vain kutsutut käyttäjät.
+- [ ] Käyttäjäroolit (Admin, Moderator, User)
+- [ ] Mahdollisuus etsiä viestejä hakusanoilla ja tutkia käyttäjien aloittamia keskusteluja

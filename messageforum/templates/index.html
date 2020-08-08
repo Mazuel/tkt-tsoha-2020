@@ -1,10 +1,31 @@
-<div>
-  <form action= '\login' method="GET">
-      <input type="submit" value="Login" id="loginId" />
-  </form>
+<html>
+<head>
+    <title>Messageforum</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+<header>
+    <div class="container">
+        <h1 class="logo">Messageforum!</h1>
+        <strong>
+            <nav>
+                <ul class="menu">
+                    {% if not session.username %}
+                    <li><a href="{{ url_for('register')}}">Register</a></li>
+                    <li><a href="{{ url_for('login')}}">Login</a></li>
+                    {% else %}
+                    <li><a>Profile</a></li>
+                    <li><a>Topics</a></li>
+                    <li><a>Someting</a></li>
+                    <li><a href="{{ url_for('logout')}}">Logout</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </strong>
+    </div>
+</header>
+<div class="container">
+    {% block content %}
+    {% endblock %}
 </div>
-<div>
-  <form action= '\register' method="GET">
-      <input type="submit" value="Register" id="registerId" />
-  </form>
-</div>
+</body>

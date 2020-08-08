@@ -1,4 +1,4 @@
-from messageforum.app import app
+from messageforum import app
 from flask_sqlalchemy import SQLAlchemy
 from os import getenv
 
