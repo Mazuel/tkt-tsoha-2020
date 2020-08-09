@@ -1,0 +1,8 @@
+{% extends 'index.html' %}
+{% block content %}
+<ul>
+{% for i in threads %}
+    <li>{{ i["title"] }}</li>
+{% endfor %}
+</ul>
+{% endblock %}

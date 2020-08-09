@@ -1,23 +1,23 @@
 from messageforum import app
-import messageforum.database.user_repository as user_repository
+from messageforum.database import user_repository, topic_repository, thread_repository
 from flask import redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return redirect("/home")
 
 
 @app.route("/register", methods=["POST"])
 def register():
     username = request.form["username"]
     password = request.form["password"]
-    if user_repository.fetch_user_if_exists(username) is None:
+    if user_repository.fetch_user_if_exists(username) is None and len(username) >= 4:
         hash_value = generate_password_hash(password)
         user_repository.add_user(username, hash_value)
     else:
-        print(username, password)
+        # Todo: show correct error message if invalid username
         return redirect("/register")
     return redirect("/login")
 
@@ -38,28 +38,55 @@ def login():
     password = request.form["password"]
     user = user_repository.fetch_user_if_exists(username)
     if user is None:
-        print()
-        # TODO: invalid username
+        return redirect("/login")
+        # TODO: invalid username or password
     else:
-        hash_value = user[0]
+        hash_value = user["password"]
         if check_password_hash(hash_value, password):
             session["username"] = username
+            session["user.role"] = user["role_name"]
+            session["user.id"] = user["id"]
+            user_repository.update_last_login(user["id"])
             return redirect("/home")
-            # TODO: correct username and password
-        else:
-            return redirect("/login")
-            # TODO: invalid password
+    # TODO: invalid username or password
+    return redirect("/login")
 
 
 @app.route("/logout")
 def logout():
     del session["username"]
-    return redirect("/")
+    del session["user.role"]
+    del session["user.id"]
+    return redirect("/home")
 
 
 @app.route("/home")
 def home():
-    return render_template("home.html")
+    topics = topic_repository.get_all_topics()
+    return render_template("home.html", topics=topics)
+
+
+@app.route("/new-topic", methods=["POST"])
+def new_topic():
+    if session["username"]:
+        title = request.form["title"]
+        if topic_repository.fetch_topic_by_title(title) is None:
+            topic_repository.add_topic(title, session["user.id"])
+        else:
+            print(f"Topic {title.upper()} already exists!")
+    return redirect("/home")
+
+
+@app.route("/profile/<username>")
+def profile(username):
+    user_data = user_repository.fetch_user_for_profile_info(username)
+    return render_template("profile.html", user=user_data, username=username)
+
+
+@app.route("/topic/<int:id_>")
+def threads_for_topic(id_):
+    threads = thread_repository.get_threads_by_id(id_)
+    return render_template("threads.html", threads=threads)
 
 
 def login_page():

@@ -1,0 +1,26 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>Profile</h1>
+            <hr>
+            <div class="card">
+                <div class="card-body">
+                    {% if user %}
+                    <h5 class="card-title">{{ username }}</h5>
+                    <hr>
+                    <p style="color: blue">User-role: {{ user["role_name"] }}</p>
+                    <p class="text-muted">Joined: {{ user["create_time"].strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    <p class="text-muted">Last login: {{ user["last_login"].strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    <p class="text-muted">Total threads created: </p>
+                    <p class="text-muted">Total messages sent: </p>
+                    {% else %}
+                    <p>User {{ username }} not found</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

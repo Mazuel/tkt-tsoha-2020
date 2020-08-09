@@ -1,31 +1,32 @@
-<html>
-<head>
-    <title>Messageforum</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-</head>
-<body>
-<header>
-    <div class="container">
-        <h1 class="logo">Messageforum!</h1>
-        <strong>
-            <nav>
-                <ul class="menu">
-                    {% if not session.username %}
-                    <li><a href="{{ url_for('register')}}">Register</a></li>
-                    <li><a href="{{ url_for('login')}}">Login</a></li>
-                    {% else %}
-                    <li><a>Profile</a></li>
-                    <li><a>Topics</a></li>
-                    <li><a>Someting</a></li>
-                    <li><a href="{{ url_for('logout')}}">Logout</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </strong>
-    </div>
-</header>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<title>Messageforum</title>
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-end">
+        <a class="navbar-brand" href="{{ url_for('home')}}">Messageforum</a>
+        <div class="collapse navbar-collapse flex-grow-0 ml-auto mr-1" id="navbarSupportedContent">
+            <ul class="navbar-nav text-right">
+                {% if not session.username %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('login')}}">Login</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('register')}}">Register</a>
+                </li>
+                {% else %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('profile', username=session.username)}}">Profile</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('logout')}}">Logout</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</div>
 <div class="container">
     {% block content %}
     {% endblock %}
 </div>
-</body>
+
