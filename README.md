@@ -26,3 +26,6 @@ Tarkoitus olisi tehdä käyttäjähaku, jotta voidaan katsoa muiden profiileja j
 virheviestejä tai vastaavia käyttäjälle ja on vielä hieman epäselkeä normaalille käyttäjälle. Sovellusta voi testata rekisteröitymällä,
 kirjautumalla ja luomalla uusia aiheita, jos on kirjautunut sisään. Tietokantaan on lisätty kaikki tarvittavat taulut, mutta niitä ei käsitellä käyttöliittymässä vielä.
 Toisiensanoen, vielä puuttuu paljon toiminnallisuutta ja ulkoasujen määrittelemistä, mutta perusidea on kasassa.
+
+
+Osoite: https://tsoha-messageforum.herokuapp.com/
