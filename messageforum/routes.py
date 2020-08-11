@@ -1,6 +1,6 @@
 from messageforum import app
 from messageforum.database import user_repository, topic_repository, thread_repository
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, flash
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
@@ -13,11 +13,17 @@ def index():
 def register():
     username = request.form["username"]
     password = request.form["password"]
-    if user_repository.fetch_user_if_exists(username) is None and len(username) >= 4:
+    if user_repository.fetch_user_if_exists(username) is None and len(username) >= 4 and len(password) >= 6:
         hash_value = generate_password_hash(password)
         user_repository.add_user(username, hash_value)
     else:
         # Todo: show correct error message if invalid username
+        if len(username) < 4:
+            flash("Username must be at least 4 characters long!")
+        elif len(password) < 6:
+            flash("Password must be at least 6 characters long!")
+        else:
+            flash(f"Username {username} already exists!")
         return redirect("/register")
     return redirect("/login")
 
@@ -38,8 +44,8 @@ def login():
     password = request.form["password"]
     user = user_repository.fetch_user_if_exists(username)
     if user is None:
+        flash("Incorrect username or password!")
         return redirect("/login")
-        # TODO: invalid username or password
     else:
         hash_value = user["password"]
         if check_password_hash(hash_value, password):
@@ -48,7 +54,7 @@ def login():
             session["user.id"] = user["id"]
             user_repository.update_last_login(user["id"])
             return redirect("/home")
-    # TODO: invalid username or password
+    flash("Incorrect username or password!")
     return redirect("/login")
 
 
@@ -83,10 +89,15 @@ def profile(username):
     return render_template("profile.html", user=user_data, username=username)
 
 
-@app.route("/topic/<int:id_>")
-def threads_for_topic(id_):
+@app.route("/<title>/<int:id_>/threads")
+def threads_for_topic(title, id_):
     threads = thread_repository.get_threads_by_id(id_)
-    return render_template("threads.html", threads=threads)
+    return render_template("threads.html", threads=threads, topic_title=title, id_=id_)
+
+
+@app.route("/<topic>/<int:id_>/threads/<thread>")
+def messages_for_thread(topic, thread, id_):
+    return render_template("messages.html", topic=topic, thread=thread)
 
 
 def login_page():

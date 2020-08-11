@@ -1,5 +1,13 @@
 {% extends 'index.html' %}
 {% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% block page_content %}{% endblock %}
+</div>
 <form action="/login" method="POST">
     <div class="form-group col-6">
         <label for="inputUsername">Username</label>

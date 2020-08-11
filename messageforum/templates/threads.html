@@ -1,8 +1,18 @@
 {% extends 'index.html' %}
 {% block content %}
 <ul>
-{% for i in threads %}
-    <li>{{ i["title"] }}</li>
-{% endfor %}
+    <div class="container">
+        {% for i in threads %}
+        <div class="list-group">
+            <a href="{{ url_for('messages_for_thread', thread=i['title'], topic=topic_title, id_=id_) }}"
+               class="list-group-item list-group-item-action">
+                {{ i["title"] }}
+                <span class="badge badge-pill badge-primary pull-right">
+                    {{ i["message_count"] }}
+                </span>
+            </a>
+        </div>
+        {%endfor%}
+    </div>
 </ul>
 {% endblock %}

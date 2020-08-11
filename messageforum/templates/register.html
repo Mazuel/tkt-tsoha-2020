@@ -1,5 +1,14 @@
 {% extends 'index.html' %}
 {% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
 <form action="/register" method="POST">
     <div class="form-group col-6">
         <label for="inputUsername">Username</label>
@@ -12,5 +21,8 @@
     <div class="form-group col-6">
         <button type="submit" class="btn btn-primary">Register</button>
     </div>
+    {% for message in get_flashed_messages() %}
+    <div class="alert-error" style="margin-left: 10px; margin-bottom=10px;">Error: {{ message }}</div>
+    {% endfor %}
 </form>
 {% endblock %}
