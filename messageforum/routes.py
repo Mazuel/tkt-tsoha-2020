@@ -76,11 +76,14 @@ def home():
 def new_topic():
     if session["username"]:
         title = request.form["title"]
+        if len(title) < 1:
+            flash("Title must not be empty!")
+            return redirect(request.referrer)
         if topic_repository.fetch_topic_by_title(title) is None:
             topic_repository.add_topic(title, session["user.id"])
         else:
-            print(f"Topic {title.upper()} already exists!")
-    return redirect("/home")
+            flash("Topic already exists!")
+    return redirect(request.referrer)
 
 
 @app.route("/profile/<username>")
@@ -89,16 +92,16 @@ def profile(username):
     return render_template("profile.html", user=user_data, username=username)
 
 
-@app.route("/<title>")
-def threads_for_topic(title):
-    threads = thread_repository.get_threads_by_id(title)
-    return render_template("threads.html", threads=threads, topic_title=title)
+@app.route("/<title>/<int:id_>")
+def threads_for_topic(title, id_):
+    threads = thread_repository.get_threads_by_id(id_)
+    return render_template("threads.html", threads=threads, topic_title=title, topic_id=id_)
 
 
-@app.route("/<topic>/<thread>")
-def messages_for_thread(topic, thread):
-    messages = message_repository.get_messages(thread)
-    return render_template("messages.html", topic=topic, thread=thread, messages=messages)
+@app.route("/<topic>/<thread>/<int:thread_id>")
+def messages_for_thread(topic, thread, thread_id):
+    messages = message_repository.get_messages(thread_id)
+    return render_template("messages.html", topic=topic, thread=thread, messages=messages, thread_id=thread_id)
 
 
 @app.route("/new-thread/<topic_title>", methods=["POST"])
@@ -107,6 +110,9 @@ def new_thread(topic_title):
     if session["username"]:
         title = request.form["title"]
         user_id = session["user.id"]
+        if len(title) < 1:
+            flash("Title must not be empty!")
+            return redirect(request.referrer)
         thread_repository.add_thread(title, topic_title, user_id)
     return redirect(request.referrer)
 
@@ -115,6 +121,12 @@ def new_thread(topic_title):
 def new_message(thread_title):
     if session["username"]:
         content = request.form["message_content"]
+        if len(content) < 1:
+            flash("Message must not be empty!")
+            return redirect(request.referrer)
+        elif len(content) > 1500:
+            flash("Message is too long!")
+            return redirect(request.referrer)
         message_repository.save_message(content, session["user.id"], thread_title)
     return redirect(request.referrer)
 

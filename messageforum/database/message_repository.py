@@ -2,7 +2,7 @@ from messageforum.database.connection import db
 
 
 def get_messages(thread_topic):
-    sql = "select id, message_content, create_time, (select username as user from users where id=create_user), visible from messages where thread_id=(select id from threads where title=:thread_topic) ORDER BY create_time ASC;"
+    sql = "select id, message_content, create_time, (select username as user from users where id=create_user), visible from messages where thread_id=:thread_topic ORDER BY create_time ASC;"
     result = db.session.execute(sql, {"thread_topic": thread_topic})
     return result.fetchall()
 

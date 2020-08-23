@@ -3,6 +3,15 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+<div class="container">
     <div class="row">
         <div class="col">
             <h1>{{topic_title}}</h1>
@@ -21,7 +30,7 @@
             <div class="container">
                 {% for i in threads %}
                 <div class="list-group">
-                    <a href="{{ url_for('messages_for_thread', thread=i['title'], topic=topic_title) }}"
+                    <a href="{{ url_for('messages_for_thread', thread=i['title'], topic=topic_title, thread_id=i['id']) }}"
                        class="list-group-item list-group-item-action">
                         {{ i["title"] }}
                         <span class="badge badge-pill badge-primary pull-right">
