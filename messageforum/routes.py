@@ -1,5 +1,5 @@
 from messageforum import app
-from messageforum.database import user_repository, topic_repository, thread_repository
+from messageforum.database import user_repository, topic_repository, thread_repository, message_repository
 from flask import redirect, render_template, request, session, flash
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -89,15 +89,34 @@ def profile(username):
     return render_template("profile.html", user=user_data, username=username)
 
 
-@app.route("/<title>/<int:id_>/threads")
-def threads_for_topic(title, id_):
-    threads = thread_repository.get_threads_by_id(id_)
-    return render_template("threads.html", threads=threads, topic_title=title, id_=id_)
+@app.route("/<title>")
+def threads_for_topic(title):
+    threads = thread_repository.get_threads_by_id(title)
+    return render_template("threads.html", threads=threads, topic_title=title)
 
 
-@app.route("/<topic>/<int:id_>/threads/<thread>")
-def messages_for_thread(topic, thread, id_):
-    return render_template("messages.html", topic=topic, thread=thread)
+@app.route("/<topic>/<thread>")
+def messages_for_thread(topic, thread):
+    messages = message_repository.get_messages(thread)
+    return render_template("messages.html", topic=topic, thread=thread, messages=messages)
+
+
+@app.route("/new-thread/<topic_title>", methods=["POST"])
+def new_thread(topic_title):
+    print(topic_title)
+    if session["username"]:
+        title = request.form["title"]
+        user_id = session["user.id"]
+        thread_repository.add_thread(title, topic_title, user_id)
+    return redirect(request.referrer)
+
+
+@app.route("/new-message/<thread_title>", methods=["POST"])
+def new_message(thread_title):
+    if session["username"]:
+        content = request.form["message_content"]
+        message_repository.save_message(content, session["user.id"], thread_title)
+    return redirect(request.referrer)
 
 
 def login_page():

@@ -1,18 +1,37 @@
 {% extends 'index.html' %}
 {% block content %}
-<ul>
-    <div class="container">
-        {% for i in threads %}
-        <div class="list-group">
-            <a href="{{ url_for('messages_for_thread', thread=i['title'], topic=topic_title, id_=id_) }}"
-               class="list-group-item list-group-item-action">
-                {{ i["title"] }}
-                <span class="badge badge-pill badge-primary pull-right">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>{{topic_title}}</h1>
+            <hr>
+            {% if session.username %}
+            <form action="/new-thread/{{topic_title}}" method="POST">
+                <div class="form-group col-6">
+                    <label for="inputTitle">Title for new thread</label>
+                    <input type="text" class="form-control" name="title" id="inputTitle">
+                </div>
+                <div class="form-group col-6">
+                    <button type="submit" class="btn btn-primary">Add thread</button>
+                </div>
+            </form>
+            {% endif %}
+            <div class="container">
+                {% for i in threads %}
+                <div class="list-group">
+                    <a href="{{ url_for('messages_for_thread', thread=i['title'], topic=topic_title) }}"
+                       class="list-group-item list-group-item-action">
+                        {{ i["title"] }}
+                        <span class="badge badge-pill badge-primary pull-right">
                     {{ i["message_count"] }}
                 </span>
-            </a>
+                    </a>
+                </div>
+                {%endfor%}
+            </div>
         </div>
-        {%endfor%}
     </div>
-</ul>
+</div>
 {% endblock %}

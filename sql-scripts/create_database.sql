@@ -42,3 +42,4 @@ INSERT INTO roles (role_name) values ('ADMIN');
 INSERT INTO roles (role_name) values ('MODERATOR');
 INSERT INTO roles (role_name) values ('USER');
 
+

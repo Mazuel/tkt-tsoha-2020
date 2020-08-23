@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'index.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1><a href="{{ url_for('threads_for_topic', title=topic) }} ">{{topic}}</a> > {{thread}}</h1>
+            <hr>
+            <div class="card">
+                {% for i in messages %}
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5>Sender: {{ i['user'] }}</h5>
+                    <h5>{{ i['create_time'].strftime('%Y-%m-%d %H:%M:%S') }}</h5>
+                </div>
+                <div class="card-body">
+                    <p>{{i['message_content']}}</p>
+                </div>
+                {% endfor %}
+            </div>
+            <form action="/new-message/{{thread}}" method="POST">
+                <div class="form-group">
+                    <label for="content">New message:</label>
+                    <textarea class="form-control" name="message_content" rows="5" id="content"></textarea>
+                </div>
+                <button type="submit">Send message</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
