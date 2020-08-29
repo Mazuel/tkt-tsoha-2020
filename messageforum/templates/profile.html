@@ -13,8 +13,8 @@
                     <p style="color: blue">User-role: {{ user["role_name"] }}</p>
                     <p class="text-muted">Joined: {{ user["create_time"].strftime('%Y-%m-%d %H:%M:%S') }}</p>
                     <p class="text-muted">Last login: {{ user["last_login"].strftime('%Y-%m-%d %H:%M:%S') }}</p>
-                    <p class="text-muted">Total threads created: </p>
-                    <p class="text-muted">Total messages sent: </p>
+                    <p class="text-muted">Total threads created: {{user["thread_count"]}}</p>
+                    <p class="text-muted">Total messages sent: {{user["message_count"]}}</p>
                     {% else %}
                     <p>User {{ username }} not found</p>
                     {% endif %}

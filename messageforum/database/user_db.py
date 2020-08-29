@@ -15,8 +15,11 @@ def fetch_user_if_exists(username):
 
 
 def fetch_user_for_profile_info(username):
-    sql = "select u.username, r.role_name, u.create_time, u.last_login from users u INNER JOIN roles as r on role_id = r.id WHERE u.username=:username;"
-    result = db.session.execute(sql, {"username": username})
+    sql = ["select u.username, r.role_name, u.create_time, u.last_login,",
+           "(SELECT COUNT(*) as thread_count FROM threads WHERE create_user = u.id and visible is true),",
+           "(SELECT COUNT(*) as message_count FROM messages WHERE create_user = u.id and visible is true)",
+           "from users u INNER JOIN roles as r on role_id = r.id WHERE u.username=:username;"]
+    result = db.session.execute("".join(sql), {"username": username})
     return result.fetchone()
 
 
