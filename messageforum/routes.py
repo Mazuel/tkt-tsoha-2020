@@ -1,5 +1,5 @@
 from messageforum import app
-from messageforum.database import user_repository, topic_repository, thread_repository, message_repository
+from messageforum.database import user_db, topic_db, thread_db, message_db
 from flask import redirect, render_template, request, session, flash
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -13,9 +13,9 @@ def index():
 def register():
     username = request.form["username"]
     password = request.form["password"]
-    if user_repository.fetch_user_if_exists(username) is None and len(username) >= 4 and len(password) >= 6:
+    if user_db.fetch_user_if_exists(username) is None and len(username) >= 4 and len(password) >= 6:
         hash_value = generate_password_hash(password)
-        user_repository.add_user(username, hash_value)
+        user_db.add_user(username, hash_value)
     else:
         # Todo: show correct error message if invalid username
         if len(username) < 4:
@@ -42,7 +42,7 @@ def register_page():
 def login():
     username = request.form["username"]
     password = request.form["password"]
-    user = user_repository.fetch_user_if_exists(username)
+    user = user_db.fetch_user_if_exists(username)
     if user is None:
         flash("Incorrect username or password!")
         return redirect("/login")
@@ -52,7 +52,7 @@ def login():
             session["username"] = username
             session["user.role"] = user["role_name"]
             session["user.id"] = user["id"]
-            user_repository.update_last_login(user["id"])
+            user_db.update_last_login(user["id"])
             return redirect("/home")
     flash("Incorrect username or password!")
     return redirect("/login")
@@ -68,7 +68,7 @@ def logout():
 
 @app.route("/home")
 def home():
-    topics = topic_repository.get_all_topics()
+    topics = topic_db.get_all_topics()
     return render_template("home.html", topics=topics)
 
 
@@ -79,8 +79,8 @@ def new_topic():
         if len(title) < 1:
             flash("Title must not be empty!")
             return redirect(request.referrer)
-        if topic_repository.fetch_topic_by_title(title) is None:
-            topic_repository.add_topic(title, session["user.id"])
+        if topic_db.fetch_topic_by_title(title) is None:
+            topic_db.add_topic(title, session["user.id"])
         else:
             flash("Topic already exists!")
     return redirect(request.referrer)
@@ -88,19 +88,19 @@ def new_topic():
 
 @app.route("/profile/<username>")
 def profile(username):
-    user_data = user_repository.fetch_user_for_profile_info(username)
+    user_data = user_db.fetch_user_for_profile_info(username)
     return render_template("profile.html", user=user_data, username=username)
 
 
 @app.route("/<title>/<int:id_>")
 def threads_for_topic(title, id_):
-    threads = thread_repository.get_threads_by_id(id_)
+    threads = thread_db.get_threads_by_id(id_)
     return render_template("threads.html", threads=threads, topic_title=title, topic_id=id_)
 
 
 @app.route("/<topic>/<thread>/<int:thread_id>")
 def messages_for_thread(topic, thread, thread_id):
-    messages = message_repository.get_messages(thread_id)
+    messages = message_db.get_messages(thread_id)
     return render_template("messages.html", topic=topic, thread=thread, messages=messages, thread_id=thread_id)
 
 
@@ -113,7 +113,7 @@ def new_thread(topic_title):
         if len(title) < 1:
             flash("Title must not be empty!")
             return redirect(request.referrer)
-        thread_repository.add_thread(title, topic_title, user_id)
+        thread_db.add_thread(title, topic_title, user_id)
     return redirect(request.referrer)
 
 
@@ -127,7 +127,7 @@ def new_message(thread_title):
         elif len(content) > 1500:
             flash("Message is too long!")
             return redirect(request.referrer)
-        message_repository.save_message(content, session["user.id"], thread_title)
+        message_db.save_message(content, session["user.id"], thread_title)
     return redirect(request.referrer)
 
 
