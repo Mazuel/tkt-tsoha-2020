@@ -7,7 +7,13 @@ def get_messages(thread_topic):
     return result.fetchall()
 
 
-def save_message(content, user_id, thread_name):
-    sql = "INSERT INTO messages (message_content, thread_id, create_time, create_user) VALUES (:content, (select id from threads where title=:thread_name), NOW(), :user_id);"
-    db.session.execute(sql, {"content": content, "thread_name": thread_name, "user_id": user_id})
+def save_message(content, user_id, thread_id):
+    sql = "INSERT INTO messages (message_content, thread_id, create_time, create_user) VALUES (:content, :thread_id, NOW(), :user_id);"
+    db.session.execute(sql, {"content": content, "thread_id": thread_id, "user_id": user_id})
+    db.session.commit()
+
+
+def delete(id_):
+    sql = "UPDATE messages set visible=:false WHERE id =:id"
+    db.session.execute(sql, {"false": False, "id": id_})
     db.session.commit()

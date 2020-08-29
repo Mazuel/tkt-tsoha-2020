@@ -17,7 +17,7 @@
             <h1>{{topic_title}}</h1>
             <hr>
             {% if session.username %}
-            <form action="/new-thread/{{topic_title}}" method="POST">
+            <form action="/new-thread/{{topic_id}}/{{topic_title}}" method="POST">
                 <div class="form-group col-6">
                     <label for="inputTitle">Title for new thread</label>
                     <input type="text" class="form-control" name="title" id="inputTitle">

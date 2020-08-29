@@ -17,7 +17,7 @@ create table topics (
     topic_title varchar (50) not null,
     create_time timestamp not null,
     create_user integer references users,
-    visible boolean default false
+    visible boolean default true
 );
 
 create table threads (
@@ -26,7 +26,7 @@ create table threads (
     topic_id integer references topics,
     create_time timestamp not null,
     create_user integer references users,
-    visible boolean default false
+    visible boolean default true
 );
 
 create table messages (
@@ -35,7 +35,7 @@ create table messages (
     thread_id integer references threads,
     create_time timestamp not null,
     create_user integer references users,
-    visible boolean default false
+    visible boolean default true
 );
 
 INSERT INTO roles (role_name) values ('ADMIN');

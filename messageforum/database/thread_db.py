@@ -11,3 +11,10 @@ def add_thread(title, topic_title, create_user):
     sql = "INSERT INTO threads (title, topic_id, create_time, create_user) VALUES (:title, (select id from topics where topic_title=:topic_title), NOW(), :create_user)"
     db.session.execute(sql, {"title": title, "topic_title": topic_title, "create_user": create_user})
     db.session.commit()
+
+
+def thread_exists(topic_id, title):
+    for thread in get_threads_by_id(topic_id):
+        if thread['title'] == title:
+            return True
+    return False

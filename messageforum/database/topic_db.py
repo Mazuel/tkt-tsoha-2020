@@ -14,6 +14,6 @@ def add_topic(title, user_id):
 
 
 def get_all_topics():
-    sql = "select id, topic_title, create_time, (select username as create_user from users where id = create_user), visible, (select count(*) as thread_count from threads where topic_id = topics.id) from topics;"
+    sql = "SELECT id, topic_title, create_time, (SELECT username as create_user FROM users WHERE id = create_user), visible, (select count(*) as thread_count from threads where topic_id = topics.id) FROM topics;"
     result = db.session.execute(sql)
     return result.fetchall()

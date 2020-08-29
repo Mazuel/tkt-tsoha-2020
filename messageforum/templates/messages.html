@@ -12,20 +12,27 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h1>{{topic}} > {{thread}}</h1>
+            <h1>{{topic}} > {{thread}} > {{thread_id}}</h1>
             <hr>
             <div class="card">
                 {% for i in messages %}
+                {% if i['visible'] == True %}
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5>Sender: {{ i['user'] }}</h5>
+                    {% if i['user'] == session['username'] %}
+                    <form action="/message/delete/{{i['id']}}" method="POST">
+                        <input type="submit" value="Delete"></input>
+                    </form>
+                    {% endif %}
                     <h5>{{ i['create_time'].strftime('%Y-%m-%d %H:%M:%S') }}</h5>
                 </div>
                 <div class="card-body">
                     <p>{{i['message_content']}}</p>
                 </div>
+                {% endif %}
                 {% endfor %}
             </div>
-            <form action="/new-message/{{thread}}" method="POST">
+            <form action="/new-message/{{thread_id}}" method="POST">
                 <div class="form-group">
                     <label for="content">New message:</label>
                     <textarea class="form-control" name="message_content" rows="5" id="content"></textarea>
