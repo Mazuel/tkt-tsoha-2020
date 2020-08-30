@@ -27,6 +27,7 @@ def register():
         else:
             flash(f"Username {username} already exists!")
         return redirect(request.referrer)
+    flash("User succesfully created!")
     return redirect("/login")
 
 
