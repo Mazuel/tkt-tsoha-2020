@@ -19,7 +19,7 @@
                 {% if i['visible'] %}
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5>Sender: <a href="{{ url_for('profile', username=i['user'])}}"> {{ i['user'] }}</a></h5>
-                    {% if i['user'] == session['username'] or session['user.role'] == 'ADMIN' %}
+                    {% if i['user'] == session['username'] or session['user.role'] == 'ADMIN' or session['user.role'] == 'MODERATOR' %}
                     <form action="/message/delete/{{i['id']}}" method="POST">
                         <input type="submit" value="Delete"></input>
                     </form>

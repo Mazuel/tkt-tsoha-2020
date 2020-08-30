@@ -3,29 +3,32 @@
 
 ## Keskustelufoorumi
 
+Osoite: https://tsoha-messageforum.herokuapp.com/
+
 ### Perusidea
 
 Peruskäyttäjillä mahdollisuus luoda omia keskusteluja, joihin muut voivat kirjoittaa, ja liittyä muiden aloittamiin keskusteluihin. Sisäänkirjautumiseen vaaditaan käyttäjätunnus, jota varten pitää rekisteröityä.
 Sivustolla on eri käyttäjärooleja, jotka voivat hallinnoida sivustoa eri tavoin:
- - Admin-tason käyttäjä voi luoda uusia aihealueita ja hallinnoida muita käyttäjiä.
- - Moderator-tason käyttäjä voi hallinnoida hänelle määritettyihin aihealueisiin liittyviä keskusteluja ja esimerkiksi poistaa asiattomia viestejä tai kokonaisia keskusteluita.
+ - Admin-tason käyttäjä hallinnoida muita käyttäjiä ja poistaa aihealueita sekä keskusteluita.
+ - Moderator-tason käyttäjä voi poistaa muiden lähettämiä viestejä.
+ - User-tason käyttäjä voi luoda aihealueita, keskusteluja, sekä lähettää viestejä ja tutkailla muiden profiileja.  
  
 ### Toteutetut toiminnot
 
 - [x] Luoda uusi käyttäjä/kirjautua sisään sivustolle
 - [x] Uuden aihealueen luominen
-- [ ] Etsiä muita käyttäjiä ja tutkia heidän profiilejaan.
-- [ ] Mahdollisuus luoda uusia keskusteluja liittyen tiettyyn aiheeseen
-- [ ] Mahdollisuus luoda suljettuja keskusteluita, joihin voi liittyä vain kutsutut käyttäjät.
-- [ ] Käyttäjäroolit (Admin, Moderator, User)
-- [ ] Mahdollisuus etsiä viestejä hakusanoilla ja tutkia käyttäjien aloittamia keskusteluja
+- [x] Etsiä muita käyttäjiä ja tutkia heidän profiilejaan.
+- [x] Mahdollisuus luoda uusia keskusteluja liittyen tiettyyn aiheeseen
+- [x] Käyttäjäroolit (Admin, Moderator, User)
+- [x] Poistaa omia viestejä tai muiden viestejä mikäli kirjautuneen käyttäjän rooli on vähintään Moderator
+- [x] Poistaa aihealueita ja keskusteluita Admin-käyttäjänä
 
-### Huomioitavaa
-Sivustolla voi toistaiseksi lisätä vain uusia aihealueita, jos on kirjautunut sisään. Omaa profiilia voi myös tarkastella, jossa näkyy erilaista tietoa käyttäjästä.
-Tarkoitus olisi tehdä käyttäjähaku, jotta voidaan katsoa muiden profiileja ja siihen liittyvää dataa. Sivusto ei ilmoita toistaiseksi minkäänlaisia
-virheviestejä tai vastaavia käyttäjälle ja on vielä hieman epäselkeä normaalille käyttäjälle. Sovellusta voi testata rekisteröitymällä,
-kirjautumalla ja luomalla uusia aiheita, jos on kirjautunut sisään. Tietokantaan on lisätty kaikki tarvittavat taulut, mutta niitä ei käsitellä käyttöliittymässä vielä.
-Toisiensanoen, vielä puuttuu paljon toiminnallisuutta ja ulkoasujen määrittelemistä, mutta perusidea on kasassa.
+### Nykyinen tila
+Pääkäyttäjän tunnus (admin:Sala1234) \
+Sovellukseen voi luoda käyttäjän joka on oletuksena rooliltaan normaali käyttäjä ja kirjautua sillä sisään. Sovelluksessa on myös yksi admin-käyttäjä, jonka roolia ei voi muuttaa,
+mutta sen kautta voi hallinoida muiden käyttäjien rooleja. Ainostaan admin-tason käyttäjä voi poistaa aihealueita (topics) ja luotuja keskusteluja (threads). Sivustolla voi tutkia myös
+muiden käyttäjien profiileja, joissa näkyy pienimuotoista statistiikkaa kuten esim. lähetetyt viestit ja aloitetut keskustelut. Profiileja voi tutkia joko käyttäjähaun kautta tai klikkaamalla
+jonkun keskustelun viestissä olevaa käyttäjänimeä, joka ohjaa kyseisen käyttäjän profiiliin.
 
+ 
 
-Osoite: https://tsoha-messageforum.herokuapp.com/
