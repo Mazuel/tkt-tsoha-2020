@@ -29,16 +29,26 @@
             {% endif %}
             <div class="container">
                 {% for i in threads %}
+                {% if i['visible'] %}
                 <div class="list-group">
                     <a href="{{ url_for('messages_for_thread', thread=i['title'], topic=topic_title, thread_id=i['id']) }}"
                        class="list-group-item list-group-item-action">
                         {{ i["title"] }}
                         <span class="badge badge-pill badge-primary pull-right">
-                    {{ i["message_count"] }}
-                </span>
+                            {{ i["message_count"] }}
+                        </span>
+                        {% if session['user.role'] == 'ADMIN' %}
+                        <span class="pull-right">
+                            <form action="{{ url_for('delete_thread', id_=i['id'])}}" method="POST">
+                                <input type="submit" value="Delete">
+                                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                            </form>
+                        </span>
+                        {% endif %}
                     </a>
                 </div>
-                {%endfor%}
+                {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>

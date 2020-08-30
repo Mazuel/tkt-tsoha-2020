@@ -15,6 +15,9 @@
                 </li>
                 {% else %}
                 <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('all_users')}}">Users</a>
+                </li>
+                <li class="nav-item active">
                     <a class="nav-link" href="{{ url_for('profile', username=session.username)}}">Profile</a>
                 </li>
                 <li class="nav-item active">
@@ -24,6 +27,11 @@
             </ul>
         </div>
     </nav>
+    <div class="text-right">
+        {% if session.username %}
+        <a class="navbar-brand">Logged in as: {{session.username}}</a>
+        {% endif %}
+    </div>
 </div>
 <div class="container">
     {% block content %}

@@ -12,14 +12,14 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h1>{{topic}} > {{thread}} > {{thread_id}}</h1>
+            <h1>{{topic}} > {{thread}}</h1>
             <hr>
             <div class="card">
                 {% for i in messages %}
-                {% if i['visible'] == True %}
+                {% if i['visible'] %}
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5>Sender: {{ i['user'] }}</h5>
-                    {% if i['user'] == session['username'] %}
+                    <h5>Sender: <a href="{{ url_for('profile', username=i['user'])}}"> {{ i['user'] }}</a></h5>
+                    {% if i['user'] == session['username'] or session['user.role'] == 'ADMIN' %}
                     <form action="/message/delete/{{i['id']}}" method="POST">
                         <input type="submit" value="Delete"></input>
                     </form>
@@ -32,13 +32,16 @@
                 {% endif %}
                 {% endfor %}
             </div>
+            {% if session['username'] %}
             <form action="/new-message/{{thread_id}}" method="POST">
                 <div class="form-group">
                     <label for="content">New message:</label>
                     <textarea class="form-control" name="message_content" rows="5" id="content"></textarea>
                 </div>
                 <button type="submit">Send message</button>
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             </form>
+            {% endif %}
         </div>
     </div>
 </div>

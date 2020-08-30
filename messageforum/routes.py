@@ -1,6 +1,8 @@
+import os
+
 from messageforum import app
-from messageforum.database import user_db, topic_db, thread_db, message_db
-from flask import redirect, render_template, request, session, flash
+from messageforum.database import user_db, topic_db
+from flask import redirect, render_template, request, session, flash, abort
 from werkzeug.security import check_password_hash, generate_password_hash
 from messageforum.routing import topic_routing, message_routing, thread_routing
 
@@ -24,7 +26,7 @@ def register():
             flash("Password must be at least 6 characters long!")
         else:
             flash(f"Username {username} already exists!")
-        return redirect("/register")
+        return redirect(request.referrer)
     return redirect("/login")
 
 
@@ -51,7 +53,9 @@ def login():
         if check_password_hash(hash_value, password):
             session["username"] = username
             session["user.role"] = user["role_name"]
+            session["csrf_token"] = os.urandom(16).hex()
             session["user.id"] = user["id"]
+            print(session["user.role"])
             user_db.update_last_login(user["id"])
             return redirect("/home")
     flash("Incorrect username or password!")
@@ -63,6 +67,7 @@ def logout():
     del session["username"]
     del session["user.role"]
     del session["user.id"]
+    del session["csrf_token"]
     return redirect("/home")
 
 
@@ -76,6 +81,31 @@ def home():
 def profile(username):
     user_data = user_db.fetch_user_for_profile_info(username)
     return render_template("profile.html", user=user_data, username=username)
+
+
+@app.route("/user/updaterole/<int:user_id>", methods=["POST"])
+def update_role(user_id):
+    if session["csrf_token"] != request.form["csrf_token"]:
+        return abort(403)
+    new_role = request.form["role"]
+    user_db.update_user_role(user_id, role_id=new_role)
+    return redirect(request.referrer)
+
+
+@app.route("/user/search", methods=["GET"])
+def all_users():
+    users = user_db.fetch_all_users()
+    return render_template("users.html", users=users)
+
+
+@app.route("/user/search", methods=["POST"])
+def user_search():
+    search_filter = request.form["username"]
+    if len(search_filter) < 1:
+        users = user_db.fetch_all_users()
+    else:
+        users = user_db.fetch_users_by_username(search_filter)
+    return render_template("users.html", users=users)
 
 
 def login_page():
