@@ -32,4 +32,3 @@ def delete_thread(id_):
     else:
         return abort(401, description="You have no permission to delete threads!")
 
-

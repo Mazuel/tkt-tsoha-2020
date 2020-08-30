@@ -1,5 +1,5 @@
 from messageforum import app
-from messageforum.database import topic_db
+from messageforum.database import topic_db, thread_db
 from flask import redirect, request, session, flash, abort
 
 
@@ -16,3 +16,13 @@ def new_topic():
     else:
         flash("Topic already exists!")
     return redirect(request.referrer)
+
+
+@app.route("/topic/delete/<int:id_>", methods=["POST"])
+def delete_topic(id_):
+    if session["csrf_token"] == request.form["csrf_token"] and session["user.role"] == "ADMIN":
+        topic_db.delete_topic(id_)
+        thread_db.delete_threads_by_topic(id_)
+        return redirect(request.referrer)
+    else:
+        return abort(401, description="You have no permission to delete threads!")

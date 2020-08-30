@@ -17,3 +17,9 @@ def get_all_topics():
     sql = "SELECT id, topic_title, create_time, (SELECT username as create_user FROM users WHERE id = create_user), visible, (select count(*) as thread_count from threads where topic_id = topics.id) FROM topics;"
     result = db.session.execute(sql)
     return result.fetchall()
+
+
+def delete_topic(topic_id):
+    sql = "UPDATE topics SET visible = false WHERE id = :topic_id"
+    db.session.execute(sql, {"topic_id": topic_id})
+    db.session.commit()

@@ -26,6 +26,12 @@ def thread_exists(topic_id, title):
     return False
 
 
+def delete_threads_by_topic(topic_id):
+    sql = "UPDATE threads SET visible = false WHERE topic_id = :topic_id"
+    db.session.execute(sql, {"topic_id": topic_id})
+    db.session.commit()
+
+
 def get_thread_by_id(thread_id):
     sql = "SELECT title, visible FROM threads WHERE id = :thread_id"
     result = db.session.execute(sql, {"thread_id": thread_id})
